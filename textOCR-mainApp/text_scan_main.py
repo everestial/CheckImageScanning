@@ -220,7 +220,7 @@ def process_files(inFile, outFile):
     if outFile is None:
         # in_filename, infile_extension = os.path.splitext(inFile)
         # outFile = f"{file_name}_output{infile_extension}"
-        out_filename = in_filename.copy()
+        out_filename = in_filename
         return in_filename, infile_extension, out_filename
     else: 
         out_filename, _ = os.path.splitext(outFile)
