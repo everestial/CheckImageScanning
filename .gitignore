@@ -11,6 +11,7 @@ textOCR-trainingTesseract/misc_folders
 textOCR-trainingTesseract/jTessBoxEditor-2.4.1
 textOCR-trainingTesseract/training_images_grayscaled
 textLabelling-training
+textCleaning-training
 requirements.txt
 
 
