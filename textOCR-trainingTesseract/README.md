@@ -35,6 +35,10 @@ Training involves several steps.
 **2) Split the image into text lines (or image lines)** - NOTE: can be done manually too.    
   The goal is to make training images small and controllable.
 
+**Web resource for manual image edit:**
+  - https://convert.town/image-dpi
+  - https://tech-lagoon.com/imagechef/en/image-to-monochrome.html
+
 Step 1, 2 of the training can also be done using the script `prepare_training_images.py` or both of either step can be done manually if desired.
 Generally it is better to have training images in 300 DPI, but it is not strict requirement. However, it is said that 300 DPI images make training better. We can test this assumptions too.
 
@@ -74,7 +78,6 @@ NOTE:
 
 ### Step 2b: (Fully and Strictly a Manual Task)    
 Then correct the data (box and ground truth) using some available tools.
-
   - https://zdenop.github.io/qt-box-editor/
   - https://github.com/zdenop/qt-box-editor
   - https://github.com/nguyenq/jtessboxeditor/releases
