@@ -1,0 +1,7 @@
+trainingData2/0001_line_13.lstmf
+trainingData2/0001b_line_1.lstmf
+trainingData2/0002_line_2.lstmf
+trainingData2/0004_line_2.lstmf
+trainingData2/0004_line_4.lstmf
+trainingData2/0004_line_5.lstmf
+trainingData2/0004_line_6.lstmf
