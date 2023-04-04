@@ -15,6 +15,10 @@
 
 ## Python packages
 
-    $ pip freeze > requirements-main-app.txt
+Available in the file `requirements-main-app.txt`.
+
     $ cat textOCR-mainApp/requirements.txt
+    
+    # if updating the requirements do
+    $ pip freeze > requirements-main-app.txt
 
