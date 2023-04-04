@@ -8,6 +8,7 @@ Repository mentioned in https://youtu.be/KE4xEzFGSU8 (but only slightly helpful)
 
 ## Dependencies
 
+Install tesseract with the following dependencies.
 ```
 $ tesseract --version
 tesseract 4.1.1
@@ -20,39 +21,96 @@ tesseract 4.1.1
  Found libarchive 3.6.0 zlib/1.2.11 liblzma/5.2.5 bz2lib/1.0.8 liblz4/1.9.3 libzstd/1.4.8
 ```
 
+## Installation
+
+Install Tesseract OCR on Ubuntu/Debian:
+
+```bash
+sudo apt-get update
+sudo apt-get install tesseract-ocr
+sudo apt-get install -y libtesseract-dev
+```
+
+For other systems, please refer to Tesseract's official installation guide:
+https://tesseract-ocr.github.io/tessdoc/Installation.html
+
+<br>
+
+Install Leptonica (required by Tesseract for training):
+```bash
+sudo apt-get install -y libleptonica-dev
+```
+<br>
+
+Create Python (version >= 3.8x) virtual environment:
+```
+python -m venv .envForTesseractTraining
+
+# activate the environment
+source .envForTesseractTraining/bin/activate
+```
+NOTE: `pipenv` or `conda` can also be used to setup this training environment.
+
+<br>
+
+Install required Python libraries:
+```bash
+pip install pytesseract
+pip install opencv-python
+pip install opencv-python-headless
+pip install Wand
+pip install pillow
+pip install imutils
+```
+
+Install ImageMagick (optional):
+
+```bash
+sudo apt-get install imagemagick
+```
+Please note that the commands listed above are mainly for Ubuntu/Debian systems. For other operating systems, you might need to adjust the installation commands accordingly.
+
+After installing Tesseract and its dependencies, you can use the training guideline (below) for creating the training data (preprocess images, and extract text from images) and preparing the custom Tesseract model.
+
+<br>
 
 ## Training
 
 Training involves several steps.
 
-### Step 1, 2, 3
+### Step 1: Prepare images for training
 
-**1) Convert image to greyscale** - NOTE: can be done manually too.  
-  Since text detection involves only indetifying character by the lines, color is less important.
-  So, removing converting image to grayscale.
+**1a) Convert image to greyscale**  
+  Since text detection involves only identifying character by the lines, color is less important.
 
-
-**2) Split the image into text lines (or image lines)** - NOTE: can be done manually too.    
+**1b) Split the image into text lines (or image lines)**
   The goal is to make training images small and controllable.
+
+
+NOTE:
+- Either of the step 1a, 1b or all steps, of preparing the training can done manually **(actually this is preferable at the beginning)**.    
+- For automated training data preparation use the script `prepare_training_images.py`.
+- Generally it is better to have training images in 300 DPI, but it is not strict requirement. However, it is said that 300 DPI images make training better. **We can test this assumptions during our training**.
+
 
 **Web resource for manual image edit:**
   - https://convert.town/image-dpi
   - https://tech-lagoon.com/imagechef/en/image-to-monochrome.html
 
-Step 1, 2 of the training can also be done using the script `prepare_training_images.py` or both of either step can be done manually if desired.
-Generally it is better to have training images in 300 DPI, but it is not strict requirement. However, it is said that 300 DPI images make training better. We can test this assumptions too.
-
+BASH CMD LINE for Step 1.
 ```bash
-python prepare_training_images.py input_image_path output_folder split_input_image
+# Use the script `prepare_training_data.py`.
+# Read the training images prepared using step 1, 2 or just give the path to the original image.
+$ python prepare_training_images.py input_image_path output_folder split_input_image
 # $ python prepare_training_images.py ./original_images/0001b.jpg ./line_images False
 ```
+<br>
 
-**3) Creating box files and ground truth**    
-  Use the script `prepare_training_data.py`.
-  Read the training images prepare using step 1, 2.
+### Step 2
 
+**2a) Create box files and ground truth**    
+  Tesseract uses the given training images (actually line images) along with the box file, ground truth text and LSTM file to further train the pre-trained model.
 
-### Step 2a:   
 Create box files for training using line images from folder line_images.
 ```bash
 $ python prepare_training_data.py generate_box_files input_folder output_folder
@@ -73,10 +131,10 @@ NOTE:
     - removed. Also make sure to remove *.gt.txt and *.png and *.box files for these images that were not processed by Tesseract. 
   - or pre-processed to prepare for retraining.
   - or we can create *.gt.txt and *.box files for these images manually. 
-    Just create a ground truth by reading the text in the image. Then create an empty *.box file. Then open the *.png file by jtessboxedEditor (mentioned below) which will allow you to add the box co-oridnates and text.
+    Just create a ground truth by reading the text in the image. Then create an empty *.box file. Then open the *.png file by jtessboxedEditor (mentioned below) which will allow you to add the box co-oridnates and text.   
+<br>
 
-
-### Step 2b: (Fully and Strictly a Manual Task)    
+**2b) Correct the box and ground truth file (Fully and Strictly a Manual Task)**  
 Then correct the data (box and ground truth) using some available tools.
   - https://zdenop.github.io/qt-box-editor/
   - https://github.com/zdenop/qt-box-editor
@@ -88,10 +146,10 @@ NOTE:
 
   - I use jtessboxedEditor
   - keep images and box, gt.txt data together to edit the box files.
-  - for the images that were not processed by tesseract, we may modify/or not modify and give box details on the images.
+  - for the images that were not processed by tesseract, we may modify/or not modify and give box details on the images.    
+<br>
 
-
-### Step 3: generate *.lstm files
+### Step 3: Generate *.lstm files
 
 **NOTE:** LSTM file should be prepared only after the correction of box and gt.txt files.
 Here, therefore I have put a breakpoint (which should be managed someother way later)
