@@ -29,7 +29,9 @@ def write_bounding_boxes(image, bounding_boxes_and_texts, write_text = False, re
             # treating the ROI as a single line of text
             # config = ("-l eng --oem 3 --psm 11")
             config = r'-c tessedit_char_whitelist=0123456789 --psm 6'
-            text = pytesseract.image_to_string(roi,config=config)
+            # text = pytesseract.image_to_string(roi,config=config)
+            text = pytesseract.image_to_string(roi).strip()
+
             # NOTE: this text can also be stored to be write later to a text file or excel sheet
 
             # add the bounding box coordinates and OCR'd text to the list
